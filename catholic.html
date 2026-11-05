@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#211b15">
+<title>묵주 기도 | 마음쉼터</title>
+<style>
+:root{--ink:#f5efe6;--muted:#c1b39f;--gold:#d8b26e}
+*{box-sizing:border-box}
+body{margin:0;min-height:100vh;display:grid;place-items:center;padding:22px;background:radial-gradient(circle at top,#30271d,#12100e 75%);font-family:system-ui,-apple-system,"Apple SD Gothic Neo","Malgun Gothic",sans-serif;color:var(--ink)}
+main{width:min(560px,100%);text-align:center}.home{display:inline-block;margin-bottom:20px;color:var(--gold);text-decoration:none;font-size:13px;font-weight:700}
+h1{font-size:28px;margin:0 0 8px}p{color:var(--muted);line-height:1.8}
+.room{background:#ffffff0c;border:1px solid #d8b26e40;border-radius:30px;padding:28px 18px;box-shadow:0 20px 50px #0006}
+.candle{font-size:52px;filter:grayscale(1) brightness(.7);transition:.25s;cursor:pointer;user-select:none;border:0;background:none}
+.candle.lit{filter:none;text-shadow:0 0 28px #ffbe50e6}
+.beads{display:flex;justify-content:center;gap:clamp(5px,2vw,9px);margin:25px 0;flex-wrap:wrap}
+.bead{width:clamp(14px,4vw,19px);height:clamp(14px,4vw,19px);border-radius:50%;background:#3b342b;border:1px solid #806d51}
+.bead.done{background:var(--gold);box-shadow:0 0 13px #d8b26e99}
+.mystery{min-height:62px;font-size:17px;line-height:1.8;color:#fff8e9;margin:18px 0}
+button.next{padding:14px 24px;border-radius:999px;border:0;background:var(--gold);color:#221a10;font-weight:800;font-size:16px;cursor:pointer}
+.progress{font-size:13px;color:var(--muted);margin-top:15px}.actions{margin-top:14px}
+.reset{background:none;border:0;color:var(--muted);text-decoration:underline;cursor:pointer;font:inherit;font-size:13px}
+button:focus-visible,a:focus-visible{outline:3px solid #f2d49a;outline-offset:4px}
+</style>
+</head>
+<body>
+<main>
+<a class="home" href="index.html">← 마음쉼터 홈으로</a>
+<h1>🕯️ 묵주 기도</h1>
+<p>한 알씩 넘기며 잠시 마음을 머뭅니다.<br>촛불을 켜고 고요한 시간을 시작해 보세요.</p>
+<section class="room">
+<button class="candle" id="candle" type="button" aria-label="촛불 켜기" aria-pressed="false">🕯️</button>
+<div class="beads" id="beads" aria-label="묵주 진행 표시"></div>
+<p class="mystery" id="mystery" aria-live="polite"></p>
+<button class="next" id="next" type="button">묵주 알 넘기기</button>
+<div class="progress"><span id="progress">1</span>/10 · <span id="round">0</span>회 완료</div>
+<div class="actions"><button class="reset" id="reset" type="button">진행 기록 지우기</button></div>
+</section>
+</main>
+<script>
+const KEY='maeumshelter_rosary_count';
+const phrases=[
+'첫 번째 알 · 마음을 내려놓고 숨을 고릅니다.',
+'두 번째 알 · 오늘 감사했던 일 하나를 떠올립니다.',
+'세 번째 알 · 미안했던 마음을 조용히 바라봅니다.',
+'네 번째 알 · 사랑하는 사람을 위해 기도합니다.',
+'다섯 번째 알 · 나 자신을 용서하는 시간을 가집니다.',
+'여섯 번째 알 · 불안을 내려놓고 지금 이 순간에 머뭅니다.',
+'일곱 번째 알 · 도움이 필요한 이들을 위해 기도합니다.',
+'여덟 번째 알 · 작은 선행 하나를 다짐합니다.',
+'아홉 번째 알 · 침묵 속에서 마음을 쉽니다.',
+'열 번째 알 · 오늘 하루를 감사로 마무리합니다.'
+];
+let count=0;
+try{count=Math.max(0,Number(localStorage.getItem(KEY))||0)}catch(e){}
+const beads=document.getElementById('beads');
+phrases.forEach(()=>{const b=document.createElement('span');b.className='bead';beads.appendChild(b)});
+function render(){
+ const step=count%10;
+ document.getElementById('progress').textContent=step+1;
+ document.getElementById('round').textContent=Math.floor(count/10);
+ document.getElementById('mystery').textContent=phrases[step];
+ [...beads.children].forEach((b,i)=>b.classList.toggle('done',i<step));
+}
+document.getElementById('next').addEventListener('click',()=>{
+ count++;try{localStorage.setItem(KEY,String(count))}catch(e){}render();
+ if(navigator.vibrate)navigator.vibrate(12);
+});
+document.getElementById('reset').addEventListener('click',()=>{
+ if(!confirm('묵주 진행 기록을 처음부터 다시 시작할까요?'))return;
+ count=0;try{localStorage.setItem(KEY,'0')}catch(e){}render();
+});
+document.getElementById('candle').addEventListener('click',function(){
+ const lit=this.classList.toggle('lit');this.setAttribute('aria-pressed',String(lit));this.setAttribute('aria-label',lit?'촛불 끄기':'촛불 켜기');
+});
+render();
+</script>
+</body>
+</html>
