@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#f6f3ee">
+<meta name="description" content="로그인 없이 잠시 머물며 마음을 쉬어가는 디지털 수행 공간, 마음쉼터입니다.">
+<title>마음쉼터 | 잠시 쉬어가는 공간</title>
+<style>
+:root{--ink:#302b26;--muted:#746b61;--line:#e8dfd4;--paper:#fffdfa}
+*{box-sizing:border-box}
+body{margin:0;min-height:100vh;color:var(--ink);font-family:system-ui,-apple-system,"Apple SD Gothic Neo","Malgun Gothic",sans-serif;background:linear-gradient(160deg,#fbf8f2,#eee7dc)}
+main{width:min(960px,100%);margin:auto;padding:clamp(36px,8vw,76px) 20px 48px}
+header{text-align:center}
+.eyebrow{font-size:12px;letter-spacing:.2em;color:#9a8067;font-weight:800}
+h1{font-size:clamp(34px,7vw,52px);letter-spacing:-.05em;margin:12px 0}
+.lead{max-width:570px;margin:0 auto;color:var(--muted);line-height:1.9}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,230px),1fr));gap:18px;margin-top:42px}
+.card{display:block;min-height:220px;padding:28px;background:var(--paper);border:1px solid var(--line);border-radius:26px;text-decoration:none;color:inherit;box-shadow:0 12px 32px #59452a0d;transition:transform .2s,box-shadow .2s}
+.card:hover,.card:focus-visible{transform:translateY(-4px);box-shadow:0 18px 40px #59452a1c;outline:2px solid #b99a78;outline-offset:3px}
+.icon{font-size:38px}h2{font-size:21px;margin:18px 0 8px}.desc{font-size:14px;line-height:1.7;color:var(--muted)}
+.arrow{display:inline-block;margin-top:20px;color:#947452;font-size:13px;font-weight:800}
+footer{text-align:center;padding:0 20px 32px;color:var(--muted);font-size:12px;line-height:1.8}
+</style>
+</head>
+<body>
+<main>
+<header>
+<div class="eyebrow">A MOMENT OF STILLNESS</div>
+<h1>마음쉼터</h1>
+<p class="lead">잠시 멈추어 숨을 고르고, 마음을 돌보는 시간.<br>원하는 공간을 선택해 조용히 머물다 가세요.</p>
+</header>
+<section class="grid" aria-label="마음쉼터 공간 선택">
+<a class="card" href="buddhist.html"><div class="icon" aria-hidden="true">🪷</div><h2>디지털 목탁</h2><div class="desc">천천히 목탁을 두드리며 호흡과 마음에 집중합니다.</div><span class="arrow">공간에 들어가기 →</span></a>
+<a class="card" href="catholic.html"><div class="icon" aria-hidden="true">🕯️</div><h2>묵주 기도</h2><div class="desc">묵주 알을 하나씩 넘기며 묵상과 기도의 시간을 갖습니다.</div><span class="arrow">공간에 들어가기 →</span></a>
+<a class="card" href="christian.html"><div class="icon" aria-hidden="true">🕊️</div><h2>말씀과 기도</h2><div class="desc">말씀을 읽고 개인 기도 제목을 이 기기에 기록합니다.</div><span class="arrow">공간에 들어가기 →</span></a>
+</section>
+</main>
+<footer>마음쉼터는 종교적 실천을 돕는 개인용 디지털 공간입니다.<br>현재 입력한 기록은 이용 중인 브라우저의 저장 공간에만 보관됩니다.</footer>
+</body>
+</html>
