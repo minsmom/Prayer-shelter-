@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#edf3fa">
+<meta name="description" content="오늘의 성경 말씀을 읽고 개인 기도 제목을 기록하는 공간입니다.">
+<title>말씀과 기도 | 마음쉼터</title>
+<style>
+:root{--ink:#243143;--muted:#64748b;--line:#dbe4ee;--blue:#3b6ea8}
+*{box-sizing:border-box}
+body{margin:0;min-height:100vh;background:linear-gradient(180deg,#f7fbff,#e8f0f8);font-family:system-ui,-apple-system,"Apple SD Gothic Neo","Malgun Gothic",sans-serif;color:var(--ink)}
+main{max-width:760px;margin:0 auto;padding:34px 20px 48px}
+.home{display:inline-block;margin-bottom:18px;color:var(--blue);text-decoration:none;font-size:13px;font-weight:700}
+h1{font-size:30px;margin:0 0 8px}p{color:var(--muted);line-height:1.8}
+.card{background:#fff;border:1px solid var(--line);border-radius:24px;padding:clamp(18px,4vw,26px);box-shadow:0 16px 40px #23466e14;margin-bottom:18px}
+.verse{font-size:clamp(18px,4vw,21px);line-height:1.8;font-weight:700;margin:0 0 10px;color:#26384d}
+.ref{color:var(--blue);font-weight:700;font-size:14px}
+button{font-family:inherit;cursor:pointer}
+.ghost{border:1px solid var(--line);background:#fff;border-radius:999px;padding:10px 16px;color:var(--ink);font-weight:700;margin-top:14px}
+textarea{width:100%;min-height:110px;resize:vertical;border:1px solid var(--line);border-radius:16px;padding:14px;font:inherit;color:var(--ink);background:#fbfdff;outline:none}
+textarea:focus{border-color:var(--blue);box-shadow:0 0 0 3px #3b6ea81f}
+.submit{margin-top:10px;border:0;background:var(--blue);color:#fff;border-radius:14px;padding:12px 18px;font-weight:800}
+.wall{display:grid;gap:12px;margin-top:18px}
+.prayer{border:1px solid var(--line);border-radius:18px;padding:16px;background:#fff}
+.prayer p{margin:0 0 12px;color:var(--ink);white-space:pre-wrap;overflow-wrap:anywhere}
+.meta{display:flex;justify-content:space-between;align-items:center;gap:10px;color:var(--muted);font-size:12px}
+.amen{border:1px solid #b9cbe0;background:#f3f8ff;color:var(--blue);border-radius:999px;padding:7px 12px;font-weight:800;font-size:13px}
+.empty{color:var(--muted);font-size:14px}
+.note{font-size:12px;color:var(--muted);line-height:1.7;margin-bottom:0}
+button:focus-visible,a:focus-visible{outline:3px solid #78a5d3;outline-offset:3px}
+</style>
+</head>
+<body>
+<main>
+<a class="home" href="index.html">← 마음쉼터 홈으로</a>
+<h1>🕊️ 말씀과 기도</h1>
+<p>오늘의 말씀을 읽고, 마음에 담아둘 기도 제목을 기록해 보세요.</p>
+<section class="card">
+<p class="verse" id="verse" aria-live="polite"></p>
+<div class="ref" id="ref"></div>
+<button class="ghost" id="another" type="button">다른 말씀 보기</button>
+</section>
+<section class="card">
+<form id="form">
+<label for="text"><strong>나의 기도 제목</strong></label>
+<p class="note">이 기도는 현재 사용 중인 브라우저에만 저장됩니다. 다른 사람에게 공개되지 않습니다.</p>
+<textarea id="text" maxlength="300" placeholder="기도 제목을 적어보세요. (최대 300자)" required></textarea>
+<button class="submit" type="submit">기도 기록하기</button>
+</form>
+<div class="wall" id="wall" aria-live="polite"></div>
+<p class="note">기록은 이 기기의 브라우저 저장 공간에 보관됩니다. 브라우저 데이터 삭제 또는 기기 변경 시 사라질 수 있습니다. 민감한 개인정보는 적지 마세요.</p>
+</section>
+</main>
+<script>
+const verses=[
+{t:'수고하고 무거운 짐 진 자들아 다 내게로 오라',r:'마태복음 11:28'},
+{t:'두려워하지 말라 내가 너와 함께 함이라',r:'이사야 41:10'},
+{t:'너희 염려를 다 주께 맡기라 이는 그가 너희를 돌보심이라',r:'베드로전서 5:7'},
+{t:'여호와는 나의 목자시니 내게 부족함이 없으리로다',r:'시편 23:1'},
+{t:'너는 마음을 다하여 여호와를 신뢰하고 네 명철을 의지하지 말라',r:'잠언 3:5'}
+];
+let lastVerse=-1;
+function showVerse(){
+ let n=Math.floor(Math.random()*verses.length);
+ if(verses.length>1&&n===lastVerse)n=(n+1)%verses.length;
+ lastVerse=n;const v=verses[n];
+ document.getElementById('verse').textContent='“'+v.t+'”';
+ document.getElementById('ref').textContent=v.r;
+}
+document.getElementById('another').addEventListener('click',showVerse);
+const KEY='maeumshelter_prayer_notes';
+let prayers=[];
+try{const saved=JSON.parse(localStorage.getItem(KEY)||'[]');if(Array.isArray(saved))prayers=saved.filter(p=>p&&typeof p.text==='string')}catch(e){}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(prayers));return true}catch(e){alert('브라우저 저장 공간에 기록하지 못했습니다. 저장 공간 설정을 확인해 주세요.');return false}}
+function renderWall(){
+ const wall=document.getElementById('wall');wall.replaceChildren();
+ if(!prayers.length){const empty=document.createElement('p');empty.className='empty';empty.textContent='아직 기록한 기도 제목이 없습니다. 첫 번째 기도를 적어보세요.';wall.appendChild(empty);return}
+ prayers.slice().reverse().forEach(p=>{
+  const card=document.createElement('article');card.className='prayer';
+  const body=document.createElement('p');body.textContent=p.text;
+  const meta=document.createElement('div');meta.className='meta';
+  const time=document.createElement('span');time.textContent=p.time||'';
+  const remove=document.createElement('button');remove.type='button';remove.className='amen';remove.textContent='삭제';
+  remove.setAttribute('aria-label','이 기도 기록 삭제');
+  remove.addEventListener('click',()=>{
+   if(!confirm('이 기도 기록을 삭제할까요?'))return;
+   prayers=prayers.filter(item=>item.id!==p.id);if(save())renderWall();
+  });
+  meta.append(time,remove);card.append(body,meta);wall.appendChild(card);
+ });
+}
+document.getElementById('form').addEventListener('submit',e=>{
+ e.preventDefault();const input=document.getElementById('text');const value=input.value.trim();if(!value)return;
+ const item={id:Date.now().toString(36)+Math.random().toString(36).slice(2),text:value,time:new Date().toLocaleString('ko-KR')};
+ prayers.push(item);if(save()){input.value='';renderWall()}
+});
+showVerse();renderWall();
+</script>
+</body>
+</html>
